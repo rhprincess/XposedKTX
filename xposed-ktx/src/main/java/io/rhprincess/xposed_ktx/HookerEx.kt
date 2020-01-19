@@ -82,10 +82,24 @@ class ConstructorHookerProxyForClazz(internal var clazz: Class<*>) :
 /**
  * this class is 4 replacing resources
  */
-class ReplaceProxy(internal var pkgName: String) {
+class ReplaceProxy() {
+    var pkgName: String = ""
     var type: String = ""
     var name: String = ""
     var replacement: Any? = null
+
+    //Primary Constructor
+    constructor(pkgName: String) : this() {
+        this.pkgName = pkgName
+    }
+
+    //Secondary Constructor
+    constructor(pkgName: String, type: String, name: String, replacement: Any) : this() {
+        this.pkgName = pkgName
+        this.type = type
+        this.name = name
+        this.replacement = replacement
+    }
 }
 
 /**
@@ -110,6 +124,17 @@ class LayoutHookerProxy(internal var pkgName: String) :
         val wrap = ReplaceProxy(pkgName)
         wrap.init()
         resp!!.res.setReplacement(wrap.pkgName, wrap.type, wrap.name, wrap.replacement)
+
+    }
+
+    fun replace(p: List<ReplaceProxy>) {
+        for (proxy in p) {
+            XposedKTX.log(
+                XposedKTX.REPLACE_TAG,
+                "replace ${proxy.pkgName}://${proxy.type}/${proxy.name}"
+            )
+            resp!!.res.setReplacement(proxy.pkgName, proxy.type, proxy.pkgName, proxy.replacement)
+        }
     }
 }
 
@@ -272,5 +297,15 @@ fun XC_InitPackageResources.InitPackageResourcesParam.replace(
     replacement: Any
 ) {
     this.res.setReplacement(pkgName, type, name, replacement)
+}
+
+fun XC_InitPackageResources.InitPackageResourcesParam.replace(p: List<ReplaceProxy>) {
+    for (proxy in p) {
+        XposedKTX.log(
+            XposedKTX.REPLACE_TAG,
+            "replace ${proxy.pkgName}://${proxy.type}/${proxy.name}"
+        )
+        this.res.setReplacement(proxy.pkgName, proxy.type, proxy.name, proxy.replacement)
+    }
 }
 /* ------------------------------------------------------------------------------------------ */
