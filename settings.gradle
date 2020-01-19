@@ -1,0 +1,2 @@
+include ':app', ':xposed-ktx'
+rootProject.name='Xposed-KTX-LIB'
