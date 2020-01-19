@@ -8,7 +8,7 @@
 
    PS: You need to use `compileOnly` instead `implementation`
 
-   ```groovy
+   ```gradle
    dependencies {
        // ...
        compileOnly 'de.robv.android.xposed:api:82'
@@ -18,7 +18,7 @@
 
 2. Second, implement our library to your dependencies
 
-   ```groovy
+   ```gradle
    dependencies {
        // ...
        compileOnly 'de.robv.android.xposed:api:82'
