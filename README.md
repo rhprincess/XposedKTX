@@ -1,5 +1,7 @@
 # Xposed KTX
 
+[ ![Download](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.0) ](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.0/link)
+
 #### A simple way to use your XposedBridge's api in Kotlin
 
 ### · Installation
