@@ -20,11 +20,13 @@
 
 2. Second, implement our library to your dependencies
 
+    latest version: [![](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.0)](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.0/link)
+
    ```gradle
    dependencies {
        // ...
        compileOnly 'de.robv.android.xposed:api:82'
-       implementation 'io.rhprincess.xp:xposed-ktx:1.0.0'
+       implementation 'io.rhprincess.xp:xposed-ktx:$latest'
        // ...
    }
    ```

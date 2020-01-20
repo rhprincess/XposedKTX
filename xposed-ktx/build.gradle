@@ -12,10 +12,10 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-        buildConfigField "String", "EX_FLAVOR", '"beta"'
+        buildConfigField "String", "EX_FLAVOR", '"release"'
     }
 
     buildTypes {
@@ -40,7 +40,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
-version = "1.0.0"
+version = "1.0.1"
 
 def siteUrl = 'https://github.com/rhprincess/XposedKTX'
 def gitUrl = 'https://github.com/rhprincess/XposedKTX.git'
