@@ -1,6 +1,8 @@
 # Xposed KTX
 
-[ ![Download](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.0) ](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.0/link)
+[ ![Download](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.1) ](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.1/link)
+![](https://img.shields.io/badge/LATEST-1.0.1-brightgrees.svg)
+[![](https://img.shields.io/badge/LICENSE-Apache2.0-ffc100.svg)](https://github.com/rhprincess/XposedKTX/blob/master/LICENSE)
 
 #### A simple way to use your XposedBridge's api in Kotlin
 
@@ -19,8 +21,6 @@
    ```
 
 2. Second, implement our library to your dependencies
-
-    latest version: [![](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.0)](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.0/link)
 
    ```gradle
    dependencies {
