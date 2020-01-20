@@ -6,6 +6,7 @@ object XposedKTX {
 
     const val TAG = "XPOSED-KTX"
     const val REPLACE_TAG = "REPLACE-RESOURCE"
+    const val LAYOUT_INFLATED = "LAYOUT-INFLATED"
     const val HOOK_METHOD_TAG = "HOOK-METHOD"
     const val HOOK_CONSTRUCTOR_TAG = "HOOK-CONSTRUCTOR"
 

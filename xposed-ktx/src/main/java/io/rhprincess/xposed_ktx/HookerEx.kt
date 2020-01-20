@@ -1,6 +1,7 @@
 package io.rhprincess.xposed_ktx
 
 import android.content.res.XModuleResources
+import android.content.res.XResForwarder
 import android.view.View
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
@@ -22,10 +23,18 @@ class HookerProxyForString(internal var className: String) :
 
     override fun before(before: (XC_MethodHook.MethodHookParam) -> Unit) {
         beforeHook = before
+        XposedKTX.log(
+            XposedKTX.HOOK_METHOD_TAG,
+            "before hooked method for ${classLoader?.loadClass(className)?.`package`?.name}://$className/$before"
+        )
     }
 
     override fun after(after: (XC_MethodHook.MethodHookParam) -> Unit) {
         afterHook = after
+        XposedKTX.log(
+            XposedKTX.HOOK_METHOD_TAG,
+            "after hooked method for ${classLoader?.loadClass(className)?.`package`?.name}://$className/$after"
+        )
     }
 }
 
@@ -38,10 +47,18 @@ class ConstructorHookerProxyForString(internal var className: String) :
 
     override fun before(before: (XC_MethodHook.MethodHookParam) -> Unit) {
         beforeHook = before
+        XposedKTX.log(
+            XposedKTX.HOOK_CONSTRUCTOR_TAG,
+            "before hooked constructor for ${classLoader?.loadClass(className)?.`package`?.name}://$className/$before"
+        )
     }
 
     override fun after(after: (XC_MethodHook.MethodHookParam) -> Unit) {
         afterHook = after
+        XposedKTX.log(
+            XposedKTX.HOOK_CONSTRUCTOR_TAG,
+            "after hooked constructor for ${classLoader?.loadClass(className)?.`package`?.name}://$className/$after"
+        )
     }
 }
 
@@ -57,10 +74,18 @@ class HookerProxyForClazz(internal var clazz: Class<*>) :
 
     override fun before(before: (XC_MethodHook.MethodHookParam) -> Unit) {
         beforeHook = before
+        XposedKTX.log(
+            XposedKTX.HOOK_METHOD_TAG,
+            "before hooked method for ${clazz.`package`?.name}://${clazz.name}/$before"
+        )
     }
 
     override fun after(after: (XC_MethodHook.MethodHookParam) -> Unit) {
         afterHook = after
+        XposedKTX.log(
+            XposedKTX.HOOK_METHOD_TAG,
+            "after hooked method for ${clazz.`package`?.name}://${clazz.name}/$after"
+        )
     }
 }
 
@@ -72,10 +97,18 @@ class ConstructorHookerProxyForClazz(internal var clazz: Class<*>) :
 
     override fun before(before: (XC_MethodHook.MethodHookParam) -> Unit) {
         beforeHook = before
+        XposedKTX.log(
+            XposedKTX.HOOK_CONSTRUCTOR_TAG,
+            "before hooked constructor for ${clazz.`package`?.name}://${clazz.name}/$before"
+        )
     }
 
     override fun after(after: (XC_MethodHook.MethodHookParam) -> Unit) {
         afterHook = after
+        XposedKTX.log(
+            XposedKTX.HOOK_CONSTRUCTOR_TAG,
+            "after hooked constructor for ${clazz.`package`?.name}://${clazz.name}/$after"
+        )
     }
 }
 
@@ -115,6 +148,7 @@ class LayoutHookerProxy(internal var pkgName: String) :
 
     override fun layoutLoaded(liparam: (XC_LayoutInflated.LayoutInflatedParam) -> Unit) {
         response = liparam
+        XposedKTX.log(XposedKTX.LAYOUT_INFLATED, "caught $pkgName://$type/$name")
     }
 
     /**
@@ -123,15 +157,22 @@ class LayoutHookerProxy(internal var pkgName: String) :
     fun replace(init: ReplaceProxy.() -> Unit) {
         val wrap = ReplaceProxy(pkgName)
         wrap.init()
+        val replacementId =
+            if (wrap.replacement is XResForwarder) (wrap.replacement as XResForwarder).id.toString() else ""
+        XposedKTX.log(
+            XposedKTX.REPLACE_TAG,
+            "${wrap.pkgName}://${wrap.type}/${wrap.name}${replacementId}"
+        )
         resp!!.res.setReplacement(wrap.pkgName, wrap.type, wrap.name, wrap.replacement)
-
     }
 
     fun replace(p: List<ReplaceProxy>) {
         for (proxy in p) {
+            val replacementId =
+                if (proxy.replacement is XResForwarder) (proxy.replacement as XResForwarder).id.toString() else ""
             XposedKTX.log(
                 XposedKTX.REPLACE_TAG,
-                "replace ${proxy.pkgName}://${proxy.type}/${proxy.name}"
+                "${proxy.pkgName}://${proxy.type}/${proxy.name}${replacementId}"
             )
             resp!!.res.setReplacement(proxy.pkgName, proxy.type, proxy.pkgName, proxy.replacement)
         }
@@ -279,6 +320,12 @@ fun XC_LayoutInflated.LayoutInflatedParam.findViewById(id: String): View {
 fun XC_InitPackageResources.InitPackageResourcesParam.replace(init: ReplaceProxy.() -> Unit) {
     val wrap = ReplaceProxy(this.packageName)
     wrap.init()
+    val replacementId =
+        if (wrap.replacement is XResForwarder) (wrap.replacement as XResForwarder).id.toString() else ""
+    XposedKTX.log(
+        XposedKTX.REPLACE_TAG,
+        "${wrap.pkgName}://${wrap.type}/${wrap.name}${replacementId}"
+    )
     this.res.setReplacement(wrap.pkgName, wrap.type, wrap.name, wrap.replacement)
 }
 
@@ -287,6 +334,12 @@ fun XC_InitPackageResources.InitPackageResourcesParam.replace(
     name: String,
     replacement: Any
 ) {
+    val replacementId =
+        if (replacement is XResForwarder) replacement.id.toString() else ""
+    XposedKTX.log(
+        XposedKTX.REPLACE_TAG,
+        "${this.packageName}://${type}/${name}${replacementId}"
+    )
     this.res.setReplacement(this.packageName, type, name, replacement)
 }
 
@@ -296,14 +349,22 @@ fun XC_InitPackageResources.InitPackageResourcesParam.replace(
     name: String,
     replacement: Any
 ) {
+    val replacementId =
+        if (replacement is XResForwarder) replacement.id.toString() else ""
+    XposedKTX.log(
+        XposedKTX.REPLACE_TAG,
+        "${pkgName}://${type}/${name}${replacementId}"
+    )
     this.res.setReplacement(pkgName, type, name, replacement)
 }
 
 fun XC_InitPackageResources.InitPackageResourcesParam.replace(p: List<ReplaceProxy>) {
     for (proxy in p) {
+        val replacementId =
+            if (proxy.replacement is XResForwarder) (proxy.replacement as XResForwarder).id.toString() else ""
         XposedKTX.log(
             XposedKTX.REPLACE_TAG,
-            "replace ${proxy.pkgName}://${proxy.type}/${proxy.name}"
+            "${proxy.pkgName}://${proxy.type}/${proxy.name}${replacementId}"
         )
         this.res.setReplacement(proxy.pkgName, proxy.type, proxy.name, proxy.replacement)
     }
