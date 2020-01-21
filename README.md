@@ -2,7 +2,7 @@
 
 [ ![Download](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.1) ](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.1/link)
 ![](https://img.shields.io/badge/Latest-1.0.1-brightgrees.svg)
-[![](https://img.shields.io/badge/License-Apache 2.0-ffc100.svg)](https://github.com/rhprincess/XposedKTX/blob/master/LICENSE)
+[![](https://img.shields.io/badge/License-Apache%202.0-ffc100.svg)](https://github.com/rhprincess/XposedKTX/blob/master/LICENSE)
 
 #### A simple way to use your XposedBridge's api in Kotlin
 
