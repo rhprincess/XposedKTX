@@ -1,6 +1,6 @@
 # Xposed KTX
 
-[ ![Download](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.1) ](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.1/link)
+[![Download](https://api.bintray.com/packages/coxylicacid-official/xposed-ktx/xposed-ktx/images/download.svg?version=1.0.1)](https://bintray.com/coxylicacid-official/xposed-ktx/xposed-ktx/1.0.1/link)
 ![](https://img.shields.io/badge/Latest-1.0.1-brightgrees.svg)
 [![](https://img.shields.io/badge/License-Apache%202.0-ffc100.svg)](https://github.com/rhprincess/XposedKTX/blob/master/LICENSE)
 
@@ -38,11 +38,62 @@ Second, implement our library to your dependencies
 
 ### Examples 
 
-1. hooking an activity’s `onCreate` method
+1. Hooking an activity’s `onCreate` method.
 
-```Kotlin 
-
+```kotlin 
+val activity = "xxx.xxx.xxx.MainActivity"
+activity.hook {
+    classLoader = lpparam.classLoader // Essential
+    methodName = "onCreate" // Essential
+    parameterTypes = Bundle::class.java // Non-Essential
+    after {
+        Log.e("Xposed KTX", "I'm successfully been hooked")
+        val activity = it.thisObject as Activity
+        Toast.makeText(activity, "You had been slain", Toast.LENGTH_LONG).show()
+    }
+    before {
+        // If you don't need this method, you can omit it
+    }
+}
 ```
 
+You can hook method using Class as well.
 
+```kotlin
+MainActivity::class.java.hook {
+    methodName = "onCreate" // Essential
+    parameterTypes = Bundle::class.java // Non-Essential
+    after {
+        Log.e("Xposed KTX", "I'm successfully been hooked")
+        val activity = it.thisObject as Activity
+        Toast.makeText(activity, "You had been slain", Toast.LENGTH_LONG).show()
+    }
+    before {
+        // If you don't need this method, you can omit it
+    }
+}
+```
 
+2. Hooking resources.
+
+   ```kotlin
+   private var MODULE_PATH = ""
+   
+   override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam?) {
+       MODULE_PATH = startupParam!!.modulePath
+   }
+   
+   override fun handleInitPackageResources(resparam: XC_InitPackageResources.InitPackageResourcesParam?) {
+       "com.android.systemui".resHook {
+           type = "layout"
+           name = "activity_main"
+           resp = resparam
+           modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res) // create module resource
+           replace { type = "drawable"; name = "ic_chart"; replacement = modRes!!.fwd(R.drawable.ic_xp) } //replace a image resource
+           layoutLoaded { // handleLayoutInflated
+               val clock = it.findViewById("clock") as TextView
+               clock.setTextColor(Color.RED);
+           }
+       }
+   }
+   ```
