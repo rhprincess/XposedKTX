@@ -16,7 +16,7 @@ Second, implement our library to your dependencies
    dependencies {
        // ...
        compileOnly 'de.robv.android.xposed:api:82'
-       implementation 'io.rhprincess.xp:xposed-ktx:$latest'
+       implementation 'io.rhprincess:xposed-ktx:$latest'
        // ...
    }
    ```
@@ -76,24 +76,24 @@ MainActivity::class.java.hook {
 
 2. Hooking resources.
 
-   ```kotlin
-   private var MODULE_PATH = ""
+```kotlin
+private var MODULE_PATH = ""
    
-   override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam?) {
-       MODULE_PATH = startupParam!!.modulePath
-   }
+override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam?) {
+    MODULE_PATH = startupParam!!.modulePath
+}
    
-   override fun handleInitPackageResources(resparam: XC_InitPackageResources.InitPackageResourcesParam?) {
-       "com.android.systemui".resHook {
-           type = "layout"
-           name = "activity_main"
-           resp = resparam
-           modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res) // create module resource
-           replace { type = "drawable"; name = "ic_chart"; replacement = modRes!!.fwd(R.drawable.ic_xp) } //replace a image resource
-           layoutLoaded { // handleLayoutInflated
-               val clock = it.findViewById("clock") as TextView
-               clock.setTextColor(Color.RED);
-           }
-       }
+override fun handleInitPackageResources(resparam: XC_InitPackageResources.InitPackageResourcesParam?) {
+    "com.android.systemui".resHook {
+        type = "layout"
+        name = "activity_main"
+        resp = resparam
+        modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res) // create module resource
+        replace { type = "drawable"; name = "ic_chart"; replacement = modRes!!.fwd(R.drawable.ic_xp) } //replace a image resource
+        layoutLoaded { // handleLayoutInflated
+         val clock = it.findViewById("clock") as TextView
+            clock.setTextColor(Color.RED);
+        }
    }
-   ```
+}
+```
